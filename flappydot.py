@@ -20,7 +20,8 @@ class Dot(Sprite):
 
 
 class PillarPair(Sprite):
-    pass
+    def update(self):
+        self.x += -10
 
 
 class FlappyGame(GameApp):
