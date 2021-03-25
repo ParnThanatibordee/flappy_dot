@@ -10,6 +10,7 @@ GRAVITY = 2.5
 STARTING_VELOCITY = -30
 JUMP_VELOCITY = -20
 
+
 class Dot(Sprite):
     def init_element(self):
         self.vy = STARTING_VELOCITY
@@ -22,20 +23,31 @@ class Dot(Sprite):
 
     def start(self):
         self.is_started = True
-        print("Game start")
+
 
     def jump(self):
         self.vy = JUMP_VELOCITY
 
     def is_out_of_screen(self):
-        pass
+        if self.y >= 500:
+            self.is_started = False
+        if self.y <= -20:
+            self.is_started = False
+        return
+
+
+
+class PillarPair(Sprite):
+    def update(self):
+        self.x += -10
 
 
 class FlappyGame(GameApp):
     def create_sprites(self):
         self.dot = Dot(self, 'images/dot.png', CANVAS_WIDTH // 2, CANVAS_HEIGHT // 2)
-
+        self.pillar_pair = PillarPair(self, 'images/pillar-pair.png', CANVAS_WIDTH, CANVAS_HEIGHT // 2)
         self.elements.append(self.dot)
+        self.elements.append(self.pillar_pair)
 
     def init_game(self):
         self.create_sprites()
@@ -44,11 +56,12 @@ class FlappyGame(GameApp):
         pass
 
     def post_update(self):
-        pass
+        self.dot.is_out_of_screen()
 
     def on_key_pressed(self, event):
         if event.char == " ":
             if self.dot.is_started == True:
+                self.post_update()
                 self.dot.jump()
             else:
                 self.dot.start()
